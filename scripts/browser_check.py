@@ -64,6 +64,16 @@ def main():
                         cells = tables.nth(index).locator("td").all_text_contents()
                         assert tuple(cells) == values, cells
                     page.locator("#replacement").screenshot(path=str(output / f"replacement-{label}.png"))
+                    safety = page.locator("#safety")
+                    assert tuple(safety.locator("td").all_text_contents()) == (
+                        "99.30", "99.36", "96.58", "96.63", "77.75", "82.66",
+                        "95.60", "96.70", "59.90", "68.62")
+                    assert "among the compared camera-based planners" in safety.inner_text()
+                    safety.screenshot(path=str(output / f"safety-{label}.png"))
+                    contributions = page.locator("#contributions")
+                    assert contributions.locator("li").count() == 3
+                    assert page.locator("main > section").last.get_attribute("id") == "contributions"
+                    contributions.screenshot(path=str(output / f"contributions-{label}.png"))
                     assert page.locator("video").count() == 2
                     for selector, duration in ((".opening-media video", 30), (".showcase-video", 22)):
                         video = page.locator(selector)

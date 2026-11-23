@@ -206,6 +206,12 @@ body:has(dialog[open]) { overflow: hidden; }
 .replacement-tables th:first-child { width: 46%; }
 .replacement-tables thead span { font-size: 12px; font-weight: 400; }
 .replacement-note { max-width: 940px; margin: 17px auto 0; font-size: 14px; color: var(--muted); line-height: 1.65; }
+.safety-tables th:first-child { width: 40%; }
+.safety-tables thead th:nth-child(2) { width: 36%; }
+.safety-tables tbody td:last-child { color: var(--green); background: var(--soft-green); }
+.contribution-list { margin: 0 0 24px; padding-left: 22px; color: #465259; font-size: 17px; line-height: 1.75; }
+.contribution-list li + li { margin-top: 16px; }
+#contributions { border-top: 1px solid var(--line); }
 .road-figure { max-width: 940px; }
 .showcase-video { aspect-ratio: 1920 / 900; }
 .compact-project .headline-results { margin-top: 28px; padding-block: 22px; }
@@ -264,6 +270,7 @@ body:has(dialog[open]) { overflow: hidden; }
   .study-section { padding-block: 26px; }
   .study-section h2 { font-size: 24px; margin-bottom: 17px; }
   .study-prose p { font-size: 16px; line-height: 1.7; }
+  .contribution-list { font-size: 16px; line-height: 1.7; }
   .study-figure figcaption { flex-direction: column; gap: 5px; font-size: 12px; }
   .replacement-tables { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .project-opening h1 { font-size: 48px; }

@@ -73,6 +73,31 @@
       <p class="replacement-note">Paired pretraining uses Navtrain real/raster pairs; direct mixed training uses Navtrain real images without a separate perception-pretraining stage. Bold marks the best score within each setup.</p>
     </section>
 
+    <section id="safety" class="study-section project-width" aria-labelledby="safety-title">
+      <h2 id="safety-title">State-of-the-art safety &amp; compliance</h2>
+      <div class="study-prose"><p>GRAD achieves <strong>state-of-the-art safety-and-compliance aggregate scores</strong> among the compared camera-based planners on NAVSIM V1 and V2's perturbed second-stage scenarios. Its clearest advantage is road and lane adherence: on V2 S2, drivable-area compliance and lane keeping exceed DriveZero-Scale by <strong>1.10 and 8.72 points</strong>, respectively.</p></div>
+      <div class="replacement-tables safety-tables">
+        <table class="result-table">
+          <caption>Safety and geometric compliance</caption>
+          <thead><tr><th scope="col">Setting / metric</th><th scope="col">DriveZero-Scale</th><th scope="col">GRAD</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">NAVSIM V1 &middot; SC</th><td>99.30</td><td><strong>99.36</strong></td></tr>
+            <tr><th scope="row">NAVSIM V2 S2 &middot; SC</th><td>96.58</td><td><strong>96.63</strong></td></tr>
+            <tr><th scope="row">NAVSIM V2 S2 &middot; GC</th><td>77.75</td><td><strong>82.66</strong></td></tr>
+          </tbody>
+        </table>
+        <table class="result-table">
+          <caption>Road and lane adherence on V2 S2</caption>
+          <thead><tr><th scope="col">Criterion</th><th scope="col">DriveZero-Scale</th><th scope="col">GRAD</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Drivable-area compliance (DAC)</th><td>95.60</td><td><strong>96.70</strong></td></tr>
+            <tr><th scope="row">Lane keeping (LK)</th><td>59.90</td><td><strong>68.62</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="replacement-note">SC averages no-at-fault-collision and drivable-area-compliance scores, with driving-direction and traffic-light compliance added for V2. GC averages drivable-area compliance and lane keeping. S2 denotes V2's perturbed second stage. All scores are percentages; higher is better.</p>
+    </section>
+
     <section id="method" class="study-section project-width" aria-labelledby="method-title">
       <h2 id="method-title">Method</h2>
       <figure class="study-figure">
@@ -120,6 +145,18 @@
       </figure>
     </section>
     <p class="evaluation-note project-width">AlpaSim evaluation uses the public 1,475-scenario nuPlan set.</p>
+
+    <section id="contributions" class="study-section project-width" aria-labelledby="contributions-title">
+      <h2 id="contributions-title">Contributions</h2>
+      <div class="study-prose">
+        <ul class="contribution-list">
+          <li><strong>Geometric observations as a GS alternative.</strong> Matched-scene comparisons show that rasters can approximately replace GS training observations under both paired pretraining and direct mixed training.</li>
+          <li><strong>Complementary learning with camera-only deployment.</strong> Task-supervised paired perception, AMD and shared planning combine geometric and appearance-rich observations to improve planning and real-image road prediction.</li>
+          <li><strong>Stronger compliance and execution.</strong> The complete system combines leading safety-and-compliance aggregates in the settings above with improved trajectory tracking and AlpaSim closed-loop performance.</li>
+        </ul>
+        <p>Geometric rasterization is a practical alternative and complement to appearance-rich training observations, with benefits for geometry-related safety and compliance.</p>
+      </div>
+    </section>
   </main>
   <footer class="site-footer project-width"><a href="../index.html">Shengze Jiang</a><span>GRAD &middot; <a href="https://github.com/NecoJac/GRAD">Code and data</a></span></footer>
 
