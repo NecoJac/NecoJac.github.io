@@ -3,6 +3,36 @@
 
   if (window.lucide) window.lucide.createIcons();
 
+  // Branch-based Pages hosting serves the source files without a build step.
+  if (document.body.classList.contains("personal-page") && /^https?:$/.test(location.protocol)) {
+    const links = document.querySelector(".profile-links");
+    if (links && !links.querySelector('a[href="CV.pdf"]')) {
+      fetch("CV.pdf", { method: "HEAD" }).then((response) => {
+        if (!response.ok || !response.headers.get("content-type")?.includes("application/pdf")) return;
+        const link = document.createElement("a");
+        link.href = "CV.pdf";
+        link.innerHTML = '<i data-lucide="file-text" aria-hidden="true"></i>CV';
+        links.firstElementChild.after(link);
+        if (window.lucide) window.lucide.createIcons();
+      }).catch(() => {});
+    }
+    const profile = document.querySelector(".profile");
+    if (profile && !profile.querySelector(".profile-photo")) {
+      const filenames = ["profile.jpg", "profile.png", "profile.webp"];
+      const tryPhoto = () => {
+        const filename = filenames.shift();
+        if (!filename) return;
+        const photo = new Image(180, 220);
+        photo.className = "profile-photo";
+        photo.alt = "Shengze Jiang";
+        photo.onload = () => profile.prepend(photo);
+        photo.onerror = tryPhoto;
+        photo.src = filename;
+      };
+      tryPhoto();
+    }
+  }
+
   // Avoid concurrent audio/video activity when a visitor plays another clip.
   const videos = Array.from(document.querySelectorAll("video"));
   videos.forEach((item) => item.addEventListener("play", () => {

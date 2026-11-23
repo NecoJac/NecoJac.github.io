@@ -13,20 +13,20 @@ This is a self-contained static site. Open `index.html` directly for the persona
 - `assets/docs/grad-overview.pdf`: the author-provided framework figure, not a submission PDF.
 - `scripts/`: reproducible preparation and validation utilities.
 
-The homepage includes email, GitHub, and LinkedIn links. CV and portrait files are intentionally not included in the initial release.
+The homepage includes email, CV, GitHub, and LinkedIn links. `CV.pdf` and `profile.jpg` initially contain clearly marked placeholders, not the author's personal documents or photograph.
 
 ## Updating CV and photo
 
-Upload these files through GitHub's **Add file > Upload files** at the repository root:
+Replace these files through GitHub's **Add file > Upload files** at the repository root:
 
-- `CV.pdf`: adds a CV link to the homepage.
-- `profile.jpg`: adds the portrait. `profile.png` and `profile.webp` also work; JPG takes priority if multiple versions are present.
+- `CV.pdf`: the public CV.
+- `profile.jpg`: the portrait. To use `profile.png` or `profile.webp`, remove the JPG placeholder first; JPG takes priority if multiple versions are present.
 
-Use these exact filenames, including capitalization. The deployment build adds links only when files exist. No HTML editing is required. Uploaded files will be publicly accessible; upload only versions intended for public release.
+Use these exact filenames, including capitalization. The homepage detects uploaded files and shows them only when available. No HTML editing is required. Uploaded files will be publicly accessible; upload only versions intended for public release.
 
 ## Publishing
 
-The `Publish website` workflow builds and deploys on pushes to `master`, or on a manual run from Actions. It copies only public pages and assets into `_site/`; preparation scripts, QA reports, and local files are not part of the Pages artifact. GitHub Pages must be enabled for this repository.
+GitHub Pages publishes the root of `master` through its existing branch-based deployment. Pushes and uploads update the site automatically. The `Check website` workflow validates personal-file handling, links, and video hashes. The optional local build produces `_site/` with only public pages and assets; it can also be used on other static hosts.
 
 The [GRAD repository](https://github.com/NecoJac/GRAD) is maintained separately. A paper download and citation block can be added once the public paper and complete author list are available.
 

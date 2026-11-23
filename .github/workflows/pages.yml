@@ -1,4 +1,4 @@
-name: Publish website
+name: Check website
 
 on:
   push:
@@ -7,30 +7,18 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: github-pages
-  cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - uses: actions/configure-pages@v5
+      - name: Test personal-file handling
+        run: python -m unittest discover -s scripts -p 'test_*.py'
       - name: Prepare public files
         run: python scripts/build_site.py
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Check links and original videos
+        run: python scripts/check_assets.py --root _site

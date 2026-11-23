@@ -1,8 +1,9 @@
-"""Local-only browser checks. No server, publication, or external navigation."""
+"""Browser checks for local files or an explicitly provided public-site URL."""
 
 import argparse
 import json
 from pathlib import Path
+from urllib.parse import urljoin, urlsplit
 
 from playwright.sync_api import sync_playwright
 
@@ -11,6 +12,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--browser", required=True)
     parser.add_argument("--site-root", type=Path)
+    parser.add_argument("--base-url")
     args = parser.parse_args()
     source = Path(__file__).resolve().parents[1]
     site = (args.site_root or source).resolve()
@@ -27,7 +29,11 @@ def main():
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
             for filename, name in (("index.html", "home"), ("GRAD/index.html", "grad")):
-                page.goto((site / filename).as_uri(), wait_until="load")
+                url = urljoin(args.base_url, filename) if args.base_url else (site / filename).as_uri()
+                page.goto(url, wait_until="load")
+                if args.base_url and name == "home" and (site / "CV.pdf").is_file():
+                    page.get_by_role("link", name="CV", exact=True).wait_for()
+                    page.locator(".profile-photo").wait_for()
                 if name == "grad":
                     page.wait_for_function("[...document.querySelectorAll('video')].every(v => v.readyState >= 2)")
                 page.locator("footer").scroll_into_view_if_needed()
@@ -67,11 +73,38 @@ def main():
                     page.screenshot(path=str(output / f"demos-{label}.png"))
             assert not errors, errors
             page.close()
+        for uploaded in (False, True):
+            page = browser.new_page(viewport={"width": 390, "height": 844})
+
+            def serve(route):
+                path = urlsplit(route.request.url).path.lstrip("/") or "index.html"
+                if path == "CV.pdf" and uploaded:
+                    route.fulfill(status=200, content_type="application/pdf", body="")
+                elif path == "profile.png" and uploaded:
+                    route.fulfill(path=str(site / "assets/images/favicon.png"))
+                elif path in ("CV.pdf", "profile.jpg", "profile.png", "profile.webp"):
+                    route.fulfill(status=404, body="")
+                elif path == "index.html":
+                    route.fulfill(path=str(source / "index.html"))
+                elif (site / path).is_file():
+                    route.fulfill(path=str(site / path))
+                else:
+                    route.fulfill(status=404, body="")
+
+            page.route("https://profile.test/**", serve)
+            page.goto("https://profile.test/", wait_until="networkidle")
+            assert page.get_by_role("link", name="CV", exact=True).count() == int(uploaded)
+            assert page.locator(".profile-photo").count() == int(uploaded)
+            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+            page.reload(wait_until="networkidle")
+            assert page.locator(".profile-photo").count() == int(uploaded)
+            page.close()
         browser.close()
     (output / "browser-report.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({"layouts": report, "video_playback": "passed",
                       "figure_dialog": "passed",
-                      "cv_and_linkedin": "passed"}, indent=2))
+                      "cv_and_linkedin": "passed",
+                      "optional_uploads": "passed"}, indent=2))
 
 
 if __name__ == "__main__":
