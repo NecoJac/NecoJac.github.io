@@ -1,0 +1,29 @@
+[
+  {
+    "source": "GRAD_overview.pdf",
+    "sha256": "61c4c89b4832048ccbee6289ca15571ffd872373ce4d1b04c7031de6c149ced8",
+    "output": "grad-overview.png",
+    "size": [
+      2600,
+      1056
+    ]
+  },
+  {
+    "source": "stage1_road_features.pdf",
+    "sha256": "90c388874adce170bc30e4488530dadc5a1a3fb5ceed2dbac1a99e417e9d6523",
+    "output": "road-features.png",
+    "size": [
+      2600,
+      1200
+    ]
+  },
+  {
+    "source": "adapter_safety_compact.pdf",
+    "sha256": "492070c5fccf4b0fb97ac6e92ebf081f91ffc5454027bcf37d8c5806d1fe2997",
+    "output": "adapter-cases.png",
+    "size": [
+      2600,
+      761
+    ]
+  }
+]

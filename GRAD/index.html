@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="GRAD learns from geometric rasters and appearance-rich observations for visual driving, with camera-only deployment.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://necojac.github.io/GRAD/">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:title" content="GRAD: Geometric Rasterization as Data Augmentation for Driving">
+  <meta property="og:description" content="Simplified geometry as training data. Camera-only driving at deployment.">
+  <meta property="og:image" content="https://necojac.github.io/assets/images/grad-social.jpg">
+  <title>GRAD | Geometric Rasterization for Driving</title>
+  <link rel="icon" href="../assets/images/favicon.png" type="image/png">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script src="../assets/vendor/lucide.min.js" defer></script>
+  <script src="../assets/js/site.js" defer></script>
+</head>
+<body class="project-page compact-project">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-nav project-width">
+    <a class="wordmark" href="../index.html">Shengze Jiang<span class="wordmark-dot" aria-hidden="true">.</span></a>
+    <nav aria-label="Project navigation"><a href="#abstract">Abstract</a><a href="#method">Method</a><a href="#demos">Demos</a></nav>
+  </header>
+
+  <main id="main">
+    <section class="project-opening project-width" aria-labelledby="project-title">
+      <h1 id="project-title">GRAD</h1>
+      <p class="paper-title">Geometric Rasterization as Data Augmentation for Driving</p>
+      <p class="project-affiliation">VITA, EPFL</p>
+      <div class="resource-links"><a class="button button-primary" href="https://github.com/NecoJac/GRAD"><i data-lucide="github" aria-hidden="true"></i>Code</a><span class="release-note">Code and data release in preparation</span></div>
+      <figure class="opening-media">
+        <video class="full-video" controls playsinline muted loop preload="metadata" poster="../assets/images/matched-poster.webp" aria-label="Thirty-second matched real and raster observations from four cameras">
+          <source src="../assets/media/real_raster_multiview.mp4" type="video/mp4">
+          <a href="../assets/media/real_raster_multiview.mp4">Download the multiview video</a>
+        </video>
+        <figcaption><span>Matched real and geometric raster observations.</span><span>Four cameras &middot; 30 s &middot; normal speed</span></figcaption>
+      </figure>
+    </section>
+
+    <section id="abstract" class="paper-section project-width" aria-labelledby="abstract-title">
+      <h2 id="abstract-title">Abstract</h2>
+      <div class="paper-prose"><p>Simulated driving states need visual observations, but photorealistic Gaussian splatting (GS) requires costly scene-specific appearance fitting. Building on <a href="https://alan-lanfeng.github.io/RAP/">RAP</a>'s CPU-based geometric rasterization, <strong>GRAD</strong> addresses the visual gap through task-supervised paired pretraining, Advantage Mutual Distillation (AMD), and shared planning, with camera-only deployment. Matched-scene comparisons show that geometric rasters achieve planning performance comparable to GS, while combining the observations further improves planning. Our results show that simplified geometry can serve as both an alternative and a complement to appearance-rich training data.</p></div>
+      <dl class="headline-results">
+        <div><dt>NAVSIM V1</dt><dd>95.02<span>PDMS</span></dd></div>
+        <div><dt>NAVSIM V2</dt><dd>56.67<span>Combined EPDMS</span></dd></div>
+        <div><dt>AlpaSim</dt><dd>96.17<span>Mean score &middot; 1,475 public scenes</span></dd></div>
+      </dl>
+    </section>
+
+    <section id="method" class="paper-section project-width" aria-labelledby="method-title">
+      <h2 id="method-title">Method</h2>
+      <figure class="paper-figure">
+        <button class="figure-zoom" type="button" data-zoom="../assets/images/grad-overview.png" data-zoom-title="GRAD framework" aria-label="Enlarge the GRAD framework">
+          <img src="../assets/images/grad-overview.png" width="2600" height="1056" loading="lazy" alt="GRAD: paired perception with AMD, shared planning, controller adaptation and post-training, and performance comparisons">
+          <span class="zoom-affordance" title="Enlarge figure"><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+        </button>
+      </figure>
+      <div class="paper-prose"><p><strong>Paired perception with AMD</strong> learns complementary camera and BEV representations from real/GS and raster observations. <strong>Shared planning</strong> trains a common planner and scorer across both domains. A controller adapter improves NAVSIM execution, while GRPO post-training uses AlpaSim execution feedback. Deployment retains only the camera-domain path.</p></div>
+    </section>
+
+    <section class="paper-section project-width" aria-labelledby="road-title">
+      <h2 id="road-title">Learning complementary geometry</h2>
+      <div class="paper-prose"><p>Pairing geometric and appearance-rich observations improves planning and real-image road prediction. On the same validation set, paired pretraining raises real-image road IoU from <strong>58.47 to 59.22</strong>.</p></div>
+      <figure class="paper-figure road-figure">
+        <button class="figure-zoom" type="button" data-zoom="../assets/images/road-features.png" data-zoom-title="Road prediction with paired pretraining" aria-label="Enlarge road prediction comparison">
+          <img src="../assets/images/road-features.png" width="2600" height="1200" loading="lazy" alt="Road ground truth, real-only and paired predictions, and road-specific Grad-CAM. Real-image IoU in this example increases from 84.42 to 87.18.">
+          <span class="zoom-affordance" title="Enlarge figure"><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+        </button>
+        <figcaption>Road predictions and road-specific Grad-CAM from the paper. Green: corrections; orange: new errors relative to the real-only model.</figcaption>
+      </figure>
+    </section>
+
+    <section class="paper-section project-width" aria-labelledby="adapter-title">
+      <h2 id="adapter-title">Aligning planning and execution</h2>
+      <div class="paper-prose"><p>A safe desired trajectory can become unsafe after controller execution. GRAD corrects the controller reference so that the executed path follows the intended plan more closely.</p></div>
+      <figure class="paper-figure">
+        <button class="figure-zoom" type="button" data-zoom="../assets/images/adapter-cases.png" data-zoom-title="Controller adaptation" aria-label="Enlarge controller adaptation cases">
+          <img src="../assets/images/adapter-cases.png" width="2600" height="761" loading="lazy" alt="Three paper examples showing camera views, trajectories, and matched close-ups. Direct LQR execution crosses the road boundary; adapted execution remains compliant.">
+          <span class="zoom-affordance" title="Enlarge figure"><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+        </button>
+        <figcaption>Three examples of execution-induced road violations corrected by reference adaptation, with the model, candidate, and initial state fixed.</figcaption>
+      </figure>
+    </section>
+
+    <section id="demos" class="paper-section project-width" aria-labelledby="demos-title">
+      <h2 id="demos-title">Closed-loop driving</h2>
+      <div class="paper-prose"><p>AlpaSim GRPO post-training raises the public-scenario mean score from <strong>91.92 to 96.17</strong>, compared with <strong>91.87</strong> for the released Garage baseline.</p></div>
+      <figure class="paper-figure">
+        <video class="full-video showcase-video" controls playsinline muted loop preload="metadata" poster="../assets/images/showcase-poster.webp" aria-label="Four AlpaSim closed-loop driving examples with camera and BEV trajectory visualizations">
+          <source src="../assets/media/closed_loop_showcase.mp4" type="video/mp4">
+          <a href="../assets/media/closed_loop_showcase.mp4">Download the closed-loop showcase</a>
+        </video>
+        <figcaption><span>Four scenes with camera views, 64 proposals, selected references, and executed history in BEV.</span><span>22 s &middot; normal speed</span></figcaption>
+      </figure>
+    </section>
+    <p class="evaluation-note project-width">V1 uses scorer ensembling; V2 uses a single model. AlpaSim evaluation uses the public 1,475-scenario nuPlan set.</p>
+  </main>
+  <footer class="site-footer project-width"><a href="../index.html">Shengze Jiang</a><span>GRAD &middot; <a href="https://github.com/NecoJac/GRAD">Code and data</a></span></footer>
+
+  <dialog class="image-dialog" aria-labelledby="dialog-title"><div class="dialog-toolbar"><h2 id="dialog-title">Figure</h2><div><a id="dialog-download" class="icon-button" href="#" download aria-label="Download figure" title="Download figure"><i data-lucide="download" aria-hidden="true"></i></a><button class="icon-button" type="button" data-close-dialog aria-label="Close figure" title="Close"><i data-lucide="x" aria-hidden="true"></i></button></div></div><div class="dialog-image-wrap"><img id="dialog-image" alt=""></div></dialog>
+</body>
+</html>

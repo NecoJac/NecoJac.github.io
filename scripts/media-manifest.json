@@ -1,0 +1,40 @@
+[
+  {
+    "source": "real_raster_multiview.mp4",
+    "sha256": "8f619d131b379a7b48fb193b3fab19e90f2d6c4fc193f5706b00cadffbfb5d0f",
+    "encoding": "original file",
+    "poster_time_s": 1.0,
+    "width": 1920,
+    "height": 684,
+    "fps": 24.0,
+    "frames": 720
+  },
+  {
+    "source": "closed_loop_showcase.mp4",
+    "sha256": "7cec9af22da0347558f4639f2e7725783703c9b6e54dfd15a781a51e0645fd69",
+    "encoding": "stream-copy concat",
+    "poster_time_s": 1.0,
+    "width": 1920,
+    "height": 900,
+    "fps": 24.0,
+    "frames": 528,
+    "inputs": [
+      {
+        "file": "closed_loop_465d43bf893d5e66.mp4",
+        "sha256": "77f4260fd4662d2ef49ee3274ccf27b9775b11d6ec87073de29dada853021818"
+      },
+      {
+        "file": "closed_loop_81c70798936b5140.mp4",
+        "sha256": "54f5e0153764408d7caa3037645fe44c788089980d745257fd231d0de8dd6e2a"
+      },
+      {
+        "file": "closed_loop_af6ce3c064fa5a56.mp4",
+        "sha256": "c2bbc4319bb380b6c95cdaf1d6d44e902e7c6baf40fdf86077e2fa7b8e475581"
+      },
+      {
+        "file": "closed_loop_b5668089b793502b.mp4",
+        "sha256": "1d5a9966b3c544f6a3f846306b9b334aafb0e735f0d5e01103a61f59c448121c"
+      }
+    ]
+  }
+]
