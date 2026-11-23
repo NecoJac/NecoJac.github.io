@@ -1,4 +1,4 @@
-"""Render saved paper figures for the website without changing the sources."""
+"""Render saved figures for the website without changing the sources."""
 
 import argparse
 import hashlib
@@ -15,7 +15,7 @@ def digest(path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--paper-root", required=True, type=Path)
+    parser.add_argument("--source-root", required=True, type=Path)
     parser.add_argument("--grad-repo", required=True, type=Path)
     args = parser.parse_args()
     site = Path(__file__).resolve().parents[1]
@@ -28,7 +28,7 @@ def main():
                ("stage1_road_features.pdf", "road-features.png"),
                ("adapter_safety_compact.pdf", "adapter-cases.png")]
     for source_name, output_name in figures:
-        source = args.paper_root / "figures" / source_name
+        source = args.source_root / "figures" / source_name
         with fitz.open(source) as document:
             page = document[0]
             pixmap = page.get_pixmap(matrix=fitz.Matrix(2600 / page.rect.width,
@@ -38,7 +38,7 @@ def main():
             provenance.append({"source": source_name, "sha256": digest(source),
                                "output": output_name,
                                "size": [pixmap.width, pixmap.height]})
-    shutil.copy2(args.paper_root / "figures/GRAD_overview.pdf", docs / "grad-overview.pdf")
+    shutil.copy2(args.source_root / "figures/GRAD_overview.pdf", docs / "grad-overview.pdf")
     shutil.copy2(images / "grad-overview.png", args.grad_repo / "assets/overview.png")
 
     (site / "scripts/document-manifest.json").write_text(

@@ -56,6 +56,14 @@ def main():
                         assert cv_link.count() == 0
                     assert page.get_by_role("link", name="LinkedIn", exact=True).get_attribute("href") == "https://www.linkedin.com/in/shengze-jiang/"
                 else:
+                    tables = page.locator("#replacement table")
+                    assert tables.count() == 2
+                    expected = (("87.16", "46.56", "88.82", "46.63", "89.02", "48.74"),
+                                ("88.48", "46.77", "88.19", "48.15"))
+                    for index, values in enumerate(expected):
+                        cells = tables.nth(index).locator("td").all_text_contents()
+                        assert tuple(cells) == values, cells
+                    page.locator("#replacement").screenshot(path=str(output / f"replacement-{label}.png"))
                     assert page.locator("video").count() == 2
                     for selector, duration in ((".opening-media video", 30), (".showcase-video", 22)):
                         video = page.locator(selector)
