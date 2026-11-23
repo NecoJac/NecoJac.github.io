@@ -56,6 +56,21 @@ def main():
                         assert cv_link.count() == 0
                     assert page.get_by_role("link", name="LinkedIn", exact=True).get_attribute("href") == "https://www.linkedin.com/in/shengze-jiang/"
                 else:
+                    section_ids = page.locator("main > section[id]").evaluate_all("els => els.map(e => e.id)")
+                    assert section_ids == ["abstract", "method", "replacement", "perception",
+                                           "safety", "execution", "demos", "contributions"]
+                    nav = page.get_by_role("navigation", name="Project navigation")
+                    assert nav.locator("a").all_text_contents() == [
+                        "Overview", "Method", "Results", "Safety", "Demos", "Contributions"]
+                    for index, target in enumerate(("abstract", "method", "replacement", "safety", "demos", "contributions")):
+                        nav.locator("a").nth(index).click()
+                        assert urlsplit(page.url).fragment == target
+                        top = page.locator(f"#{target}").bounding_box()["y"]
+                        at_bottom = page.evaluate("scrollY + innerHeight >= document.documentElement.scrollHeight - 3")
+                        assert 0 <= top < height and (abs(top - 28) < 3 or at_bottom), (target, top)
+                    if width <= 640:
+                        boxes = [nav.locator("a").nth(i).bounding_box() for i in range(6)]
+                        assert len({round(box["y"]) for box in boxes}) == 2
                     tables = page.locator("#replacement table")
                     assert tables.count() == 2
                     expected = (("87.16", "46.56", "88.82", "46.63", "89.02", "48.74"),

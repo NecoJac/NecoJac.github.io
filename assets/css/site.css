@@ -87,7 +87,8 @@ strong { font-weight: 650; }
 .site-footer { display: flex; justify-content: space-between; align-items: center; gap: 20px; border-top: 1px solid var(--line); padding: 22px 0 28px; color: var(--muted); font-size: 12px; }
 
 .project-opening { padding-top: 30px; text-align: center; }
-.project-page .site-nav { min-height: 72px; }
+.project-page .site-nav { min-height: 72px; flex-wrap: wrap; padding-block: 12px; }
+.project-page .site-nav nav { flex-wrap: wrap; gap: 0 22px; }
 .project-opening .eyebrow { margin-bottom: 10px; }
 .project-opening h1 { font-size: 58px; line-height: 1.08; font-weight: 750; color: #175d79; }
 .study-title { font-size: 27px; line-height: 1.28; font-weight: 600; margin-top: 13px; text-wrap: balance; }
@@ -241,7 +242,7 @@ body:has(dialog[open]) { overflow: hidden; }
   .wordmark { font-size: 16px; }
   .site-nav nav { gap: 14px; font-size: 12px; }
   .project-page .site-nav { flex-wrap: wrap; padding-block: 13px; gap: 4px 14px; }
-  .project-page .site-nav nav { gap: 14px; }
+  .project-page .site-nav nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; gap: 0 12px; }
   .nav-icon { display: none; }
   .profile { padding: 38px 0 34px; }
   .profile-photo { float: none; width: 130px; height: 160px; margin: 0 0 24px; }

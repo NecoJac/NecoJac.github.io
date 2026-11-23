@@ -20,7 +20,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-nav project-width">
     <a class="wordmark" href="../index.html">Shengze Jiang</a>
-    <nav aria-label="Project navigation"><a href="#abstract">Overview</a><a href="#replacement">Results</a><a href="#method">Method</a><a href="#demos">Demos</a></nav>
+    <nav aria-label="Project navigation"><a href="#abstract">Overview</a><a href="#method">Method</a><a href="#replacement">Results</a><a href="#safety">Safety</a><a href="#demos">Demos</a><a href="#contributions">Contributions</a></nav>
   </header>
 
   <main id="main">
@@ -48,6 +48,17 @@
       </dl>
     </section>
 
+    <section id="method" class="study-section project-width" aria-labelledby="method-title">
+      <h2 id="method-title">Method</h2>
+      <figure class="study-figure">
+        <button class="figure-zoom" type="button" data-zoom="../assets/images/grad-overview.png" data-zoom-title="GRAD framework" aria-label="Enlarge the GRAD framework">
+          <img src="../assets/images/grad-overview.png" width="2600" height="1056" loading="lazy" alt="GRAD: paired perception with AMD, shared planning, controller adaptation and post-training, and performance comparisons">
+          <span class="zoom-affordance" title="Enlarge figure"><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+        </button>
+      </figure>
+      <div class="study-prose"><p><strong>Paired perception with AMD</strong> learns complementary camera and BEV representations from real/GS and raster observations. <strong>Shared planning</strong> trains a common planner and scorer across both domains. A controller adapter improves NAVSIM execution, while GRPO post-training uses AlpaSim execution feedback. Deployment retains only the camera-domain path.</p></div>
+    </section>
+
     <section id="replacement" class="study-section project-width" aria-labelledby="replacement-title">
       <h2 id="replacement-title">Replacing GS, learning complementary geometry</h2>
       <div class="study-prose"><p>Within each training setup, we keep 10k Navtrain states fixed and compare observations of the same 10k SimScale states with matched trajectory targets. <strong>Rasters achieve comparable planning performance to GS.</strong> Combining both observations further improves the paired-pretraining results.</p></div>
@@ -71,6 +82,18 @@
         </table>
       </div>
       <p class="replacement-note">Paired pretraining uses Navtrain real/raster pairs; direct mixed training uses Navtrain real images without a separate perception-pretraining stage. Bold marks the best score within each setup.</p>
+    </section>
+
+    <section id="perception" class="study-section project-width" aria-labelledby="road-title">
+      <h2 id="road-title">Learning complementary geometry</h2>
+      <div class="study-prose"><p>Pairing geometric and appearance-rich observations improves planning and real-image road prediction. On the same validation set, paired pretraining raises real-image road IoU from <strong>58.47 to 59.22</strong>.</p></div>
+      <figure class="study-figure road-figure">
+        <button class="figure-zoom" type="button" data-zoom="../assets/images/road-features.png" data-zoom-title="Road prediction with paired pretraining" aria-label="Enlarge road prediction comparison">
+          <img src="../assets/images/road-features.png" width="2600" height="1200" loading="lazy" alt="Road ground truth, real-only and paired predictions, and road-specific Grad-CAM. Real-image IoU in this example increases from 84.42 to 87.18.">
+          <span class="zoom-affordance" title="Enlarge figure"><i data-lucide="maximize-2" aria-hidden="true"></i></span>
+        </button>
+        <figcaption>Road predictions and road-specific Grad-CAM. Green: corrections; orange: new errors relative to the real-only model.</figcaption>
+      </figure>
     </section>
 
     <section id="safety" class="study-section project-width" aria-labelledby="safety-title">
@@ -98,30 +121,7 @@
       <p class="replacement-note">SC averages no-at-fault-collision and drivable-area-compliance scores, with driving-direction and traffic-light compliance added for V2. GC averages drivable-area compliance and lane keeping. S2 denotes V2's perturbed second stage. All scores are percentages; higher is better.</p>
     </section>
 
-    <section id="method" class="study-section project-width" aria-labelledby="method-title">
-      <h2 id="method-title">Method</h2>
-      <figure class="study-figure">
-        <button class="figure-zoom" type="button" data-zoom="../assets/images/grad-overview.png" data-zoom-title="GRAD framework" aria-label="Enlarge the GRAD framework">
-          <img src="../assets/images/grad-overview.png" width="2600" height="1056" loading="lazy" alt="GRAD: paired perception with AMD, shared planning, controller adaptation and post-training, and performance comparisons">
-          <span class="zoom-affordance" title="Enlarge figure"><i data-lucide="maximize-2" aria-hidden="true"></i></span>
-        </button>
-      </figure>
-      <div class="study-prose"><p><strong>Paired perception with AMD</strong> learns complementary camera and BEV representations from real/GS and raster observations. <strong>Shared planning</strong> trains a common planner and scorer across both domains. A controller adapter improves NAVSIM execution, while GRPO post-training uses AlpaSim execution feedback. Deployment retains only the camera-domain path.</p></div>
-    </section>
-
-    <section class="study-section project-width" aria-labelledby="road-title">
-      <h2 id="road-title">Learning complementary geometry</h2>
-      <div class="study-prose"><p>Pairing geometric and appearance-rich observations improves planning and real-image road prediction. On the same validation set, paired pretraining raises real-image road IoU from <strong>58.47 to 59.22</strong>.</p></div>
-      <figure class="study-figure road-figure">
-        <button class="figure-zoom" type="button" data-zoom="../assets/images/road-features.png" data-zoom-title="Road prediction with paired pretraining" aria-label="Enlarge road prediction comparison">
-          <img src="../assets/images/road-features.png" width="2600" height="1200" loading="lazy" alt="Road ground truth, real-only and paired predictions, and road-specific Grad-CAM. Real-image IoU in this example increases from 84.42 to 87.18.">
-          <span class="zoom-affordance" title="Enlarge figure"><i data-lucide="maximize-2" aria-hidden="true"></i></span>
-        </button>
-        <figcaption>Road predictions and road-specific Grad-CAM. Green: corrections; orange: new errors relative to the real-only model.</figcaption>
-      </figure>
-    </section>
-
-    <section class="study-section project-width" aria-labelledby="adapter-title">
+    <section id="execution" class="study-section project-width" aria-labelledby="adapter-title">
       <h2 id="adapter-title">Aligning planning and execution</h2>
       <div class="study-prose"><p>A safe desired trajectory can become unsafe after controller execution. GRAD corrects the controller reference so that the executed path follows the intended plan more closely.</p></div>
       <figure class="study-figure">
